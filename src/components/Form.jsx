@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import Error from './Error';
 import shortid from 'shortid';
+import PropTypes from 'prop-types'
 
-const Form = ({addNewSpend}) => {
+const Form = ({saveSpend, saveCreateSpend}) => {
 
   const [name, setName] = useState('');
   const [spend, setSpend] = useState(0);
@@ -12,6 +13,7 @@ const Form = ({addNewSpend}) => {
   const addSpend = (event) => {
     event.preventDefault();
 
+    //validate
     if(spend < 1|| isNaN(spend) || name.trim() === '') {
       setError(true);
       return;
@@ -23,9 +25,11 @@ const Form = ({addNewSpend}) => {
       spend,
       id: shortid.generate()
     }
-
+    
     //envio de arreglo con data a funtion del app
-    addNewSpend(spendData);
+    // console.log("spendData", spendData);
+    saveSpend(spendData);
+    saveCreateSpend(true);
 
     //formateo de campos del form
     setName('');
@@ -55,7 +59,7 @@ const Form = ({addNewSpend}) => {
                 className="u-full-width"
                 placeholder="Ej. 300"
                 value={spend}
-                onChange={e => setSpend(parseInt(e.target.value))}
+                onChange={e => setSpend(parseInt(e.target.value, 10))}
             />
         </div>
 
@@ -66,6 +70,11 @@ const Form = ({addNewSpend}) => {
         />
     </form>
   )
+}
+
+Form.propTypes = {
+  saveSpend: PropTypes.func.isRequired,
+  saveCreateSpend: PropTypes.func.isRequired
 }
 
 export default Form

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import QuestionBudget from './components/QuestionBudget';
 import Form from './components/Form';
 import ListSpend from './components/ListSpend';
@@ -7,20 +7,27 @@ import ControlAmout from './components/ControlAmout';
 const App = () => {
 
   //Definir state
-  const [amout, setAmount] = useState(0);
+  const [budget, setBudget] = useState(0);
   const [remaining, setRemaining] = useState(0);
-  const [showQ, setShowQ] = useState(true);
-  const [spend, setSpend] = useState([]);
+  const [showQuestion, updateQuestion] = useState(true);
+  const [spends, saveSpends] = useState([]);
+  const [spend, saveSpend] = useState({});
+  const [createSpend, saveCreateSpend] = useState(false);
 
+  //useEffect
+  useEffect(() => {
+    if(createSpend) {
+      saveSpends([
+        ...spends,
+        spend
+      ]);
 
-  //cuando se agregue un gasto
-  const addNewSpend = spends => {
-    console.log("desde app gonorrea", spends);
-    setSpend([
-      ...spend,
-      spends
-    ])
-  }
+      const ppRemaining = remaining - spend.spend;
+      setRemaining(ppRemaining);
+
+      saveCreateSpend(false);
+    }
+  }, [spend, createSpend, spends, remaining]);
 
   return (
     <div className="container">
@@ -29,21 +36,25 @@ const App = () => {
 
         <div className="contenido-principal contenido">
 
-          {showQ ? (<QuestionBudget
-            setAmount={setAmount}
+          {showQuestion ? (<QuestionBudget
+            setBudget={setBudget}
             setRemaining={setRemaining}
-            setShowQ={setShowQ}
+            updateQuestion={updateQuestion}
+
           />) : 
           (<div className="row">
           <div className="one-half column">
-            <Form addNewSpend={addNewSpend} />
+            <Form 
+              saveSpend={saveSpend}
+              saveCreateSpend={saveCreateSpend}
+            />
             </div>
             <div className="one-half column">
               <ListSpend 
-                spend={spend}
+                spends={spends}
               />
               <ControlAmout 
-                amout={amout}
+                budget={budget}
                 remaining={remaining}
               />
             </div>

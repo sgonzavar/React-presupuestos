@@ -1,18 +1,23 @@
 import React from 'react'
 import Spend from './Spend'
+import PropTypes from 'prop-types'
 
-const ListSpend = ({spend}) => {
+const ListSpend = ({spends}) => {
   return (
     <div className="gastos-realizados">
       <h2>Listado</h2>
-      {spend.map(item => (
+      {spends.map(item => (
         <Spend 
-          spend={item}
           key={item.id}
+          spend={item}
         />
       ))}
     </div>
   )
+}
+
+ListSpend.propTypes = {
+  spends: PropTypes.array.isRequired
 }
 
 export default ListSpend

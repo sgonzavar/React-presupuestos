@@ -1,6 +1,8 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import {reviewBudget} from '../helpers'
 
-const ControlAmout = ({amount, remaining}) => {
+const ControlAmout = ({budget, remaining}) => {
 
   const currency = { style: 'currency', currency: 'USD' };
   const formatSpend = new Intl.NumberFormat('en-US', currency);
@@ -8,13 +10,18 @@ const ControlAmout = ({amount, remaining}) => {
   return (
     <>
       <div className="alert alert-primary">
-        Presupuesto : {amount}
+        Presupuesto : {budget}
       </div>
-      <div className="alert">
+      <div className={reviewBudget(budget, remaining)}>
         Restante : {formatSpend.format(remaining)}
       </div>
     </>
   )
+}
+
+ControlAmout.propTypes = {
+  budget: PropTypes.number.isRequired,
+  remaining: PropTypes.number.isRequired
 }
 
 export default ControlAmout

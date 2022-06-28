@@ -1,32 +1,34 @@
 import React, {useState} from 'react'
 import Error from './Error'
+import PropTypes from 'prop-types'
 
-const QuestionBudget = ({ setAmount, setRemaining, setShowQ }) => {
+
+const QuestionBudget = ({ setBudget, setRemaining, updateQuestion }) => {
 
     //Define state
-    const [amounts, setAmounts] = useState(0);
+    // const [amounts, setAmounts] = useState(0);
+    const [cost, setCost] = useState(0);
     const [error, setError] = useState(false);
 
 
     //Leer valor y ponerlo en el state
     const defineBudget = (e) => {
         // console.log(parseFloat(e.target.value))
-        setAmounts(parseInt(e.target.value, 10));
+        setCost(parseInt(e.target.value, 10));
     }
 
     //Enviar presupuesto
     const addBudget = (e) => {
         e.preventDefault();
 
-        if(amounts < 1 || isNaN(amounts)) {
+        if(cost < 1 || isNaN(cost)) {
             setError(true);
             return;
         }
         setError(false);
-
-        setAmount(amounts);
-        setRemaining(amounts);
-        setShowQ(false);
+        setBudget(cost);
+        setRemaining(cost);
+        updateQuestion(false);
     }
     
   return (
@@ -34,6 +36,7 @@ const QuestionBudget = ({ setAmount, setRemaining, setShowQ }) => {
        <h2>Coloca Tu Presupuesto</h2>
 
        {error ? <Error message={"El Presupuesto Es Incorrecto"} /> : null}
+
        <form onSubmit={addBudget}>
             <input 
                 type="number"
@@ -49,6 +52,12 @@ const QuestionBudget = ({ setAmount, setRemaining, setShowQ }) => {
        </form>
     </>
   )
+}
+
+QuestionBudget.propTypes = {
+    setBudget: PropTypes.func.isRequired,
+    setRemaining: PropTypes.func.isRequired,
+    updateQuestion: PropTypes.func.isRequired
 }
 
 export default QuestionBudget
